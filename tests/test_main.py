@@ -15,7 +15,7 @@ client = TestClient(app)
 def test_root_returns_html():
     response = client.get("/")
     assert response.status_code == 200
-    assert "Vyhledávač" in response.text
+    assert "testMark1@index" in response.text
 
 def test_search_success(monkeypatch):
     def dummy_run(*args, **kwargs):

@@ -69,7 +69,6 @@ def export():
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(current_results, f, ensure_ascii=False, indent=2)
 
-        # Pošleme soubor ke stažení
         return FileResponse(filename, media_type='application/json', filename=filename)
 
     except Exception as e:
