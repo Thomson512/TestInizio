@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vyhledávač</title>
+</head>
+
+<body>
+  <h1>Vyhledávač - scraper</h1>
+
+  <form id="searchForm">
+    <input type="text" id="query" name="query" placeholder="Zadej hledaný výraz" required />
+    <button type="submit">Hledat</button>
+  </form>
+
+  <button onclick="exportJson()">Exportovat jako .json</button>
+
+  <div id="loading" style="display:none; text-align: center;">
+    <p>Načítám...</p>
+  </div>
+
+  <div id="results"></div>
+
+  <script>
+    function exportJson() {
+      const query = document.getElementById("query").value;
+      if (!query) return alert("Zadej dotaz");
+
+      const url = `/export?query=${encodeURIComponent(query)}`;
+      window.open(url, "_blank");
+    }
+
+    document.getElementById("searchForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+      const query = document.getElementById("query").value;
+      if (!query) return alert("Zadej dotaz");
+
+      document.getElementById("loading").style.display = "block";
+
+      try {
+        const res = await fetch(`/search?query=${encodeURIComponent(query)}`);
+        if (!res.ok) {
+          throw new Error(`Chyba HTTP: ${res.status}`);
+        }
+        const data = await res.json();
+
+        document.getElementById("loading").style.display = "none";
+
+        const resultsDiv = document.getElementById("results");
+        resultsDiv.innerHTML = '';
+        if (data && Array.isArray(data)) {
+          data.forEach(item => {
+            const link = document.createElement('a');
+            link.href = item.link;
+            link.textContent = item.title;
+            link.target = "_blank";
+            const wrapper = document.createElement('p'); // nebo 'div'
+            wrapper.appendChild(link);
+            resultsDiv.appendChild(wrapper);
+          });
+        } else {
+          resultsDiv.textContent = "Nebyly nalezeny žádné výsledky.";
+        }
+      } catch (error) {
+        document.getElementById("loading").style.display = "none";
+        console.error("Chyba při vyhledávání:", error);
+        alert("Došlo k chybě při vyhledávání.\n\nPodrobnosti: " + error.message);
+      }
+    });
+  </script>
+</body>
+</html>
