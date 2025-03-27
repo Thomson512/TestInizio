@@ -4,29 +4,24 @@
   <meta charset="UTF-8" />
   <title>Vyhledávač</title>
 </head>
-
+<!-- testMark@index -->
 <body>
   <h1>Vyhledávač - scraper</h1>
 
-  <!-- Formulář pro zadání dotazu -->
   <form id="searchForm">
     <input type="text" id="query" name="query" placeholder="Zadej hledaný výraz" required />
     <button type="submit">Hledat</button>
   </form>
 
-  <!-- Tlačítko pro export -->
   <button onclick="exportJson()">Exportovat jako .json</button>
 
-  <!-- Indikátor načítání -->
   <div id="loading" style="display:none; text-align: center;">
     <p>Načítám...</p>
   </div>
 
-  <!-- Místo pro zobrazení výsledků -->
   <div id="results"></div>
 
   <script>
-    // Funkce pro export výsledků jako JSON
     function exportJson() {
       const query = document.getElementById("query").value;
       if (!query) return alert("Zadej dotaz");
@@ -35,9 +30,8 @@
       window.open(url, "_blank");
     }
 
-    // Event listener pro formulář - použití Fetch API
     document.getElementById("searchForm").addEventListener("submit", async function(event) {
-      event.preventDefault();
+    event.preventDefault();
 
       const query = document.getElementById("query").value;
       if (!query) return alert("Zadej dotaz");
@@ -49,20 +43,18 @@
         if (!res.ok) {
           throw new Error(`Chyba HTTP: ${res.status}`);
         }
-
         const data = await res.json();
+
         document.getElementById("loading").style.display = "none";
 
         const resultsDiv = document.getElementById("results");
         resultsDiv.innerHTML = '';
-
         if (data && Array.isArray(data)) {
           data.forEach(item => {
             const link = document.createElement('a');
             link.href = item.link;
             link.textContent = item.title;
             link.target = "_blank";
-            link.style.display = "block";
             const wrapper = document.createElement('p'); // nebo 'div'
             wrapper.appendChild(link);
             resultsDiv.appendChild(wrapper);
