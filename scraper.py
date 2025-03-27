@@ -47,8 +47,6 @@ def run_scraper(query: str):
         browser.close()
 
     return results
-
-# 🔐 důležité! přesměrování stdout jen při přímém spuštění
 if __name__ == "__main__":
     import io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
