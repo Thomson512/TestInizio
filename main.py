@@ -12,8 +12,8 @@ PYTHON = sys.executable
 app = FastAPI()
 current_results = []
 
-@app.get("/", response_class=HTMLResponse)
 @app.head("/")
+@app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     template_path = os.path.join("templates", "index.html")
     print(f"[LOG] Načítám šablonu: {template_path}")
