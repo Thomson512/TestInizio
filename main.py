@@ -9,10 +9,7 @@ from fastapi.responses import HTMLResponse
 from starlette.requests import Request
 
 PYTHON = sys.executable
-
 app = FastAPI()
-
-# Nastavení šablon
 current_results = []
 
 @app.get("/", response_class=HTMLResponse)
@@ -48,9 +45,11 @@ def search(query: str):
             return {"[ERR]": "Chyba při spouštění scraperu", "detail": result.stderr}
 
         output = result.stdout.strip()
-        print(">>> stdout:", output)
+        #Debug: print(">>> stdout:", output)
+        print("[LOG] Vráceny výsledky z scraper.py ")
 
         if output:
+            print("[LOG] Validace výsledků z scraper.py - OK ")
             current_results = json.loads(output)
             return current_results
         else:
